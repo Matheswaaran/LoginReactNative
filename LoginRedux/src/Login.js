@@ -1,11 +1,43 @@
 import React, {Component} from 'react';
-import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
+import {Alert, Platform, StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
+import { connect } from 'react-redux';
+import { changeUsername, doLogin } from "./Actions/LoginActions";
 
-class Login extends Component<Props> {
+class Login extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = { password: "" };
+    }
+
+    onUserNameTextInputHandler = (text) => {
+        this.props.changeUsername(text);
+    };
+
+    onPasswordTextInputHandler = (text) => {
+        this.setState({password: text});
+    };
+
+    onLoginBtnPressHandler = () => {
+        // this.props.doLogin(this.props.username);
+    };
+
     render() {
         return (
             <View style={styles.body}>
-                <Text style={styles.text}>Login</Text>
+                <View style={styles.inputItem}>
+                    <Text style={styles.text} >Username/Email-id</Text>
+                    <TextInput textContentType="username" value={this.props.username} style={styles.textInput} onChangeText={this.onUserNameTextInputHandler} autoFocus/>
+                </View>
+                <View style={styles.inputItem}>
+                    <Text style={styles.text} >Password</Text>
+                    <TextInput textContentType="password" secureTextEntry={true} value={this.state.password} style={styles.textInput} onChangeText={this.onPasswordTextInputHandler}/>
+                </View>
+                <TouchableOpacity onPress={this.onLoginBtnPressHandler}>
+                    <View style={styles.loginBtnView}>
+                        <Text style={styles.loginBtnText}>Login</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -13,16 +45,44 @@ class Login extends Component<Props> {
 
 const styles = StyleSheet.create({
     body: {
-        height: Dimensions.get('window').height,
-        width: Dimensions.get('window').width,
         flex: 1,
-        backgroundColor: '#000000',
-        alignItems: 'center',
-        justifyContent: 'center',
+        marginTop: 60,
     },
-    text: {
-        fontSize: 40,
+    inputItem: {
+        margin: 16,
+    },
+    text :{
+        fontSize: 16,
+    },
+    textInput: {
+        fontSize: 20,
+        marginTop: 16,
+        color: "#0000FF",
+        borderBottomColor: "#000000",
+        borderBottomWidth: 1,
+    },
+    loginBtnView: {
+        backgroundColor: "#0000FF",
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 45,
+        margin: 16,
+    },
+    loginBtnText: {
+        color: "#FFFFFF",
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
 
-export default Login;
+const mapStateToProps = (state) => ({
+    ...state.AuthReducer,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    changeUsername: (text) => dispatch({ type: 'CHANGE_USERNAME', payload: text })
+    // doLogin: (username) => doLogin(username),
+    // doLogout: () => dispatch({ type: 'DO_LOGOUT' })
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

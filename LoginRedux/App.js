@@ -13,7 +13,7 @@ class App extends Component {
         return (
             <View style={styles.body}>
                 <IndicatorViewPager
-                    style={styles.body}
+                    style={styles.viewPager}
                     indicator={<PagerTitleIndicator
                         style={styles.indicatorContainer}
                         itemStyle={styles.itemStyle}
@@ -36,18 +36,20 @@ class App extends Component {
 
 const styles = StyleSheet.create({
     body: {
-        height: Dimensions.get('window').height,
-        width: Dimensions.get('window').width,
         flex: 1,
         backgroundColor: '#FFFFFF',
     },
+    viewPager: {
+        marginTop: Platform.select({ ios: 40, android: 5 }),
+        flex: 1,
+    },
     container: {
-        height: Dimensions.get('window').height,
-        width: Dimensions.get('window').width,
+        flex: 1,
     },
     indicatorContainer: {
         position: 'absolute',
         width: Dimensions.get('window').width,
+        backgroundColor: '#FFFFFF',
     },
     itemStyle: {
         width: Dimensions.get('window').width * 0.5,

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Alert, View, SegmentedControlIOS, Dimensions} from 'react-native';
-import { IndicatorViewPager, PagerTitleIndicator } from 'rn-viewpager';
-import Login from "./src/Login";
-import Register from "./src/Register";
+import { connect } from 'react-redux';
+import EntryPoint from './src/EntryPoint';
+import Home from './src/Home';
 
 class App extends Component {
     constructor(props) {
@@ -12,23 +12,7 @@ class App extends Component {
     render() {
         return (
             <View style={styles.body}>
-                <IndicatorViewPager
-                    style={styles.viewPager}
-                    indicator={<PagerTitleIndicator
-                        style={styles.indicatorContainer}
-                        itemStyle={styles.itemStyle}
-                        selectedItemStyle={styles.selectedItemStyle}
-                        selectedItemTextStyle={styles.selectedItemTextStyle}
-                        itemTextStyle={styles.itemTextStyle}
-                        trackScroll={true}
-                        titles={['Login', 'Register']} />}>
-                    <View style={styles.container}>
-                        <Login/>
-                    </View>
-                    <View style={styles.container}>
-                        <Register/>
-                    </View>
-                </IndicatorViewPager>
+                {this.props.isLoggedin ? (<Home/>) : (<EntryPoint/>)}
             </View>
         );
     }
@@ -65,4 +49,12 @@ const styles = StyleSheet.create({
     },
 });
 
-export default App;
+const mapStateToProps = (state) => ({
+    ...state.AuthReducer,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

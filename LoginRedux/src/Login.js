@@ -7,7 +7,6 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { password: "" };
     }
 
     onUserNameTextInputHandler = (text) => {
@@ -15,11 +14,12 @@ class Login extends Component {
     };
 
     onPasswordTextInputHandler = (text) => {
-        this.setState({password: text});
+        this.props.changePassword(text);
     };
 
     onLoginBtnPressHandler = () => {
-        // this.props.doLogin(this.props.username);
+        const { username, password, doLogin } = this.props;
+        this.props.dispatch(doLogin({ username, password }));
     };
 
     render() {
@@ -27,11 +27,11 @@ class Login extends Component {
             <View style={styles.body}>
                 <View style={styles.inputItem}>
                     <Text style={styles.text} >Username/Email-id</Text>
-                    <TextInput textContentType="username" value={this.props.username} style={styles.textInput} onChangeText={this.onUserNameTextInputHandler} autoFocus/>
+                    <TextInput textContentType="username" value={this.props.username} style={styles.textInput} onChangeText={this.onUserNameTextInputHandler} keyboardType="email-address" autoFocus/>
                 </View>
                 <View style={styles.inputItem}>
                     <Text style={styles.text} >Password</Text>
-                    <TextInput textContentType="password" secureTextEntry={true} value={this.state.password} style={styles.textInput} onChangeText={this.onPasswordTextInputHandler}/>
+                    <TextInput textContentType="password" secureTextEntry={true} value={this.props.password} style={styles.textInput} onChangeText={this.onPasswordTextInputHandler}/>
                 </View>
                 <TouchableOpacity onPress={this.onLoginBtnPressHandler}>
                     <View style={styles.loginBtnView}>
@@ -80,8 +80,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    changeUsername: (text) => dispatch({ type: 'CHANGE_USERNAME', payload: text })
-    // doLogin: (username) => doLogin(username),
+    changeUsername: (text) => dispatch({ type: 'CHANGE_USERNAME', payload: text }),
+    changePassword: (text) => dispatch({ type: 'CHANGE_PASSWORD', payload: text }),
+    doLogin: doLogin,
+    dispatch: dispatch,
     // doLogout: () => dispatch({ type: 'DO_LOGOUT' })
 });
 
